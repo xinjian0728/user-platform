@@ -146,10 +146,15 @@ public class FrontControllerServlet extends HttpServlet {
                         return;
                     } else if (controller instanceof RestController) {
                         RestController restController = RestController.class.cast(controller);
+                        Class clz = restController.getClass();
+                        String clzName = clz.getName();
+                        request.getServletContext().log("clzName=" + clzName);
+                        Annotation[] annotations = clz.getDeclaredAnnotations();
+
+
                         restController.register(request , response);
                         return;
                     }
-
                 }
             } catch (Throwable throwable) {
                 if (throwable.getCause() instanceof IOException) {

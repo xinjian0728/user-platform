@@ -59,7 +59,7 @@ public class DatabaseUserRepository implements UserRepository {
         }catch(Exception e){
             e.printStackTrace();
         }finally {
-            dbConnectionManager.releaseConnection();
+            //dbConnectionManager.releaseConnection();
         }
         return ret;
     }

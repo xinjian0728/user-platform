@@ -20,6 +20,7 @@
 </head>
 <body>
 	<div class="container">
+		<div class="mb-3 font-weight-normal">${msg}</div>
 		<form class="form-signin">
 			<h1 class="h3 mb-3 font-weight-normal">登录</h1>
 			<label for="inputEmail" class="sr-only">请输出电子邮件</label> <input

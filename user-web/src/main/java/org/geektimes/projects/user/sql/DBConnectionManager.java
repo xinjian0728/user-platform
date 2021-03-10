@@ -2,6 +2,9 @@ package org.geektimes.projects.user.sql;
 
 import org.geektimes.projects.user.domain.User;
 
+import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.sql.DataSource;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
@@ -11,37 +14,53 @@ import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 public class DBConnectionManager {
 
-    private Connection connection;
+    private final Logger logger = Logger.getLogger(DBConnectionManager.class.getName());
 
-    public void setConnection(Connection connection) {
-        this.connection = connection;
+    @Resource(name = "jdbc/UserPlatformDB")
+    private DataSource dataSource;
+
+    @Resource(name = "bean/EntityManager")
+    private EntityManager entityManager;
+
+    public EntityManager getEntityManager() {
+        logger.info("当前 EntityManager 实现类：" + entityManager.getClass().getName());
+        return entityManager;
     }
+
+//    private Connection connection;
+//
+//    public void setConnection(Connection connection) {
+//        this.connection = connection;
+//    }
 
     public Connection getConnection() {
         Connection conn = null;
         try{
-            Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-            String databaseURL = "jdbc:derby:D:/user-platform;create=true";
-            conn = DriverManager.getConnection(databaseURL);
-            this.connection = conn;
+            //Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+           // String databaseURL = "jdbc:derby:D:/geekbang;create=true";
+            //conn = DriverManager.getConnection(databaseURL);
+            //this.connection = conn;
+            conn = dataSource.getConnection();
         }catch (Exception e){
             e.printStackTrace();
         }
         return conn;
     }
 
-    public void releaseConnection() {
-        if (this.connection != null) {
-            try {
-                this.connection.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e.getCause());
-            }
-        }
-    }
+
+//    public void releaseConnection() {
+//        if (this.connection != null) {
+//            try {
+//                this.connection.close();
+//            } catch (SQLException e) {
+//                throw new RuntimeException(e.getCause());
+//            }
+//        }
+//    }
 
     public static final String DROP_USERS_TABLE_DDL_SQL = "DROP TABLE users";
 
@@ -69,7 +88,7 @@ public class DBConnectionManager {
 //        Driver driver = DriverManager.getDriver("jdbc:derby:/db/user-platform;create=true");
 //        Connection connection = driver.connect("jdbc:derby:/db/user-platform;create=true", new Properties());
 
-        String databaseURL = "jdbc:derby:user-platform;create=true";
+        String databaseURL = "jdbc:derby:D:/user-platform;create=true";
         Connection connection = DriverManager.getConnection(databaseURL);
 
         Statement statement = connection.createStatement();
